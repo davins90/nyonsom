@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stay Tuned</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            color: #00ff00;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            height: 100vh;
+            overflow: hidden;
+            padding: 2rem;
+        }
+        
+        .terminal {
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .line {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+        }
+        
+        .main-text {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 2rem 0;
+            opacity: 0;
+        }
+        
+        .cursor {
+            display: inline-block;
+            background: #00ff00;
+            animation: blink 1s infinite;
+        }
+        
+        .formula {
+            position: absolute;
+            font-size: 0.9rem;
+            opacity: 0;
+            color: #00aa00;
+        }
+        
+        .formula-1 { top: 15%; right: 20%; }
+        .formula-2 { bottom: 20%; left: 15%; }
+        .formula-3 { top: 70%; right: 10%; }
+        .formula-4 { top: 25%; left: 10%; }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        @keyframes formulaAppear {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 0.7; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.8); }
+        }
+        
+        @media (max-width: 768px) {
+            .main-text {
+                font-size: 2rem;
+            }
+            .line {
+                font-size: 1rem;
+            }
+            .formula {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="line" id="line1">$ whoami</div>
+        <div class="line" id="line2">> root</div>
+        <div class="line" id="line3">$ ./initialize_project.sh</div>
+        <div class="line" id="line4">> Loading dependencies...</div>
+        <div class="line" id="line5">> Compiling ideas...</div>
+        <div class="line" id="line6">> Optimizing algorithms...</div>
+        <div class="line" id="line7">> Ready.</div>
+        
+        <div class="main-text" id="mainText"></div>
+        
+        <div class="line" id="line8">$ echo "Coming soon..."</div>
+        <div class="line" id="line9">> <span class="cursor">█</span></div>
+        
+        <!-- Formule matematiche/statistiche -->
+        <div class="formula formula-1">H(X) = -∑ p(x) log p(x)</div>
+        <div class="formula formula-2">P(A|B) = P(B|A)P(A)/P(B)</div>
+        <div class="formula formula-3">σ² = E[(X-μ)²]</div>
+        <div class="formula formula-4">∫₋∞^∞ e^(-x²/2) dx = √(2π)</div>
+    </div>
+
+    <script>
+        const lines = [
+            { id: 'line1', delay: 0 },
+            { id: 'line2', delay: 800 },
+            { id: 'line3', delay: 1500 },
+            { id: 'line4', delay: 2200 },
+            { id: 'line5', delay: 3000 },
+            { id: 'line6', delay: 3800 },
+            { id: 'line7', delay: 4600 },
+            { id: 'line8', delay: 6500 },
+            { id: 'line9', delay: 7200 }
+        ];
+        
+        const mainTextEl = document.getElementById('mainText');
+        const mainText = 'Stay Tuned...';
+        
+        // Animazione linee terminale
+        lines.forEach(line => {
+            setTimeout(() => {
+                document.getElementById(line.id).style.animation = 'fadeIn 0.5s forwards';
+            }, line.delay);
+        });
+        
+        // Animazione testo principale (typewriter)
+        setTimeout(() => {
+            let i = 0;
+            const typeWriter = () => {
+                if (i < mainText.length) {
+                    mainTextEl.textContent += mainText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 150);
+                } else {
+                    // Aggiungi cursore finale
+                    mainTextEl.innerHTML += '<span class="cursor">█</span>';
+                }
+            };
+            mainTextEl.style.opacity = '1';
+            typeWriter();
+        }, 5500);
+        
+        // Animazione formule che appaiono casualmente
+        const formulas = document.querySelectorAll('.formula');
+        const showRandomFormula = () => {
+            const randomFormula = formulas[Math.floor(Math.random() * formulas.length)];
+            randomFormula.style.animation = 'formulaAppear 4s ease-in-out';
+            
+            setTimeout(() => {
+                randomFormula.style.animation = '';
+            }, 4000);
+        };
+        
+        // Inizia le formule dopo che appare il testo principale
+        setTimeout(() => {
+            showRandomFormula();
+            setInterval(showRandomFormula, 6000);
+        }, 7000);
+    </script>
+</body>
+</html>
